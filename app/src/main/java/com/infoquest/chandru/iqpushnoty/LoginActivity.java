@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -238,6 +239,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        Log.v("onCreateLoader", Integer.toString(i));
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
@@ -263,6 +265,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         addEmailsToAutoComplete(emails);
+        Log.v("addEmailsToAutoCompl", Integer.toString(emails.size()));
     }
 
     @Override
@@ -311,6 +314,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
+                Log.v("doInBackground", "after 2 sec delay");
             } catch (InterruptedException e) {
                 return false;
             }
@@ -319,6 +323,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
+                    Log.v("creds", "Email: "+pieces[0]+ ", Pwd: "+pieces[1]);
                     return pieces[1].equals(mPassword);
                 }
             }
@@ -333,7 +338,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+                //finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
